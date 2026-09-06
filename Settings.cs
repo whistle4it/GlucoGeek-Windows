@@ -1,0 +1,42 @@
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.Json;
+using Microsoft.Win32;
+
+namespace Librewin;
+
+internal sealed class Settings
+{
+    public string Email { get; set; } = "";
+    public string PasswordProtected { get; set; } = "";
+    public string Patient { get; set; } = "";
+    public string Unit { get; set; } = "Automatic";
+    public int Minutes { get; set; } = 1;
+    public bool ShowTrend { get; set; } = true;
+    public bool Colour { get; set; } = true;
+    public string ApiVersion { get; set; } = "4.16.0";
+    public string ApiProduct { get; set; } = "llu.ios";
+    public string UserAgent { get; set; } = "Mozilla/5.0 (iPhone; CPU OS 17_4.1 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/17.4.1 Mobile/10A5355d Safari/8536.25";
+    public static string Location => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Librewin", "settings.json");
+    public static Settings Load() => File.Exists(Location) ? JsonSerializer.Deserialize<Settings>(File.ReadAllText(Location)) ?? new() : new();
+    public string Password => PasswordProtected.Length == 0 ? "" : Encoding.UTF8.GetString(ProtectedData.Unprotect(Convert.FromBase64String(PasswordProtected), null, DataProtectionScope.CurrentUser));
+    public void SetPassword(string password) => PasswordProtected = Convert.ToBase64String(ProtectedData.Protect(Encoding.UTF8.GetBytes(password), null, DataProtectionScope.CurrentUser));
+    public void Save()
+    {
+        Directory.CreateDirectory(Path.GetDirectoryName(Location)!);
+        File.WriteAllText(Location + ".tmp", JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true }));
+        File.Move(Location + ".tmp", Location, true);
+    }
+    public Settings Copy() => (Settings)MemberwiseClone();
+    public bool IsMmol(Snapshot snapshot) => Unit == "mmol/L" || Unit == "Automatic" && snapshot.Mmol;
+    public static bool Startup
+    {
+        get { using var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run"); return key?.GetValue("Librewin") is string; }
+        set
+        {
+            using var key = Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run");
+            if (value) key.SetValue("Librewin", "\"" + Application.ExecutablePath + "\" --background");
+            else key.DeleteValue("Librewin", false);
+        }
+    }
+}
