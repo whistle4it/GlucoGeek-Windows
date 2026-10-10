@@ -61,6 +61,7 @@ internal static class SelfTests
             handler.ExpireOnce = true;
             awaitSync(client.Fetch(CancellationToken.None));
             Check(handler.Expired, "401 refresh reauthenticates once");
+            DexcomTests.Run(Check);
             File.WriteAllLines(output, passed.Append($"{passed.Count(p => p.StartsWith("PASS"))} checks passed; {passed.Count(p => p.StartsWith("UNVERIFIED"))} unverified."));
             return 0;
         }

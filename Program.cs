@@ -23,7 +23,7 @@ internal static class Program
         if (args.Contains("--self-test")) return SelfTests.Run(args.Last());
         if (args.Contains("--preview-settings"))
         {
-            using var form = new SettingsDialog(new Settings());
+            using var form = new SettingsDialog(new Settings { Provider = args.Contains("--dexcom") ? "Dexcom G7" : "LibreLinkUp" });
             form.Show(); Application.DoEvents();
             using var bitmap = new Bitmap(form.Width, form.Height);
             form.DrawToBitmap(bitmap, new Rectangle(0, 0, bitmap.Width, bitmap.Height));
@@ -51,7 +51,7 @@ internal static class Program
 internal sealed class TrayApp : ApplicationContext
 {
     private Settings settings;
-    private LibreLinkClient client;
+    private IGlucoseClient client;
     private readonly NotifyIcon tray = new() { Visible = true, Text = "Librewin" };
     private Icon? currentIcon;
     private readonly Dashboard dashboard = new();
@@ -64,7 +64,7 @@ internal sealed class TrayApp : ApplicationContext
     public TrayApp(Settings settings, bool background, bool smoke = false)
     {
         this.settings = settings;
-        client = new(settings);
+        client = IGlucoseClient.Create(settings);
         // Establish a WinForms synchronization context before any asynchronous work.
         _ = dashboard.Handle;
         SynchronizationContext.SetSynchronizationContext(new WindowsFormsSynchronizationContext());
@@ -85,8 +85,8 @@ internal sealed class TrayApp : ApplicationContext
         dashboard.BeginInvoke(async () =>
         {
             if (smoke) return;
-            if (!background || settings.PasswordProtected.Length == 0) Open();
-            if (settings.PasswordProtected.Length == 0) await Configure();
+            if (!background || !settings.HasCredentials) Open();
+            if (!settings.HasCredentials) await Configure();
             else await Refresh();
         });
     }
@@ -98,7 +98,7 @@ internal sealed class TrayApp : ApplicationContext
         if (dialog.ShowDialog(dashboard) != DialogResult.OK) return;
         settings = dialog.Result;
         client.Dispose();
-        client = new(settings);
+        client = IGlucoseClient.Create(settings);
         snapshot = null; // Never leave another account's reading on screen.
         error = "";
         await Refresh();

@@ -27,7 +27,7 @@ internal static class TrayArtwork
             g.DrawEllipse(pen, 13, 13, 38, 38);
             g.DrawLines(pen, [new Point(32, 21), new Point(32, 32), new Point(41, 37)]);
         }
-        else if (state == "unknown" || trend is < 1 or > 5)
+        else if (state == "unknown" || trend is < 1 or > 7)
         {
             using var font = new Font("Segoe UI", 46, FontStyle.Bold, GraphicsUnit.Pixel);
             using var format = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
@@ -36,10 +36,16 @@ internal static class TrayArtwork
         else
         {
             g.TranslateTransform(32, 32);
-            g.RotateTransform(trend switch { 1 => 90, 2 => 45, 4 => -45, 5 => -90, _ => 0 });
+            g.RotateTransform(trend switch { 1 or 6 => 90, 2 => 45, 4 => -45, 5 or 7 => -90, _ => 0 });
             g.TranslateTransform(-32, -32);
             // Filled geometry remains bold when Windows scales this to 16–32 pixels.
-            g.FillPolygon(brush, [new Point(10, 26), new Point(34, 26), new Point(34, 12),
+            if (trend is 6 or 7)
+            {
+                foreach (int y in new[] { 12, 36 })
+                    g.FillPolygon(brush, [new Point(12, y + 6), new Point(36, y + 6), new Point(36, y),
+                        new Point(53, y + 10), new Point(36, y + 20), new Point(36, y + 14), new Point(12, y + 14)]);
+            }
+            else g.FillPolygon(brush, [new Point(10, 26), new Point(34, 26), new Point(34, 12),
                 new Point(55, 32), new Point(34, 52), new Point(34, 38), new Point(10, 38)]);
         }
         return bitmap;

@@ -17,10 +17,10 @@ internal static class Wire
     }
 }
 
-internal record Reading(DateTimeOffset At, double Mgdl, int Trend, bool High = false, bool Low = false)
+internal record Reading(DateTimeOffset At, double Mgdl, int Trend, bool High = false, bool Low = false, string? TrendDescription = null)
 {
-    public string Arrow => Trend switch { 1 => "↓", 2 => "↘", 3 => "→", 4 => "↗", 5 => "↑", _ => "" };
-    public string TrendText => Trend switch { 1 => "Falling quickly", 2 => "Falling", 3 => "Steady", 4 => "Rising", 5 => "Rising quickly", _ => "Trend unavailable" };
+    public string Arrow => Trend switch { 1 => "↓", 2 => "↘", 3 => "→", 4 => "↗", 5 => "↑", 6 => "↓↓", 7 => "↑↑", _ => "" };
+    public string TrendText => TrendDescription ?? (Trend switch { 1 => "Falling quickly", 2 => "Falling", 3 => "Steady", 4 => "Rising", 5 => "Rising quickly", 6 => "Falling quickly", 7 => "Rising quickly", _ => "Trend unavailable" });
     public bool Stale(DateTimeOffset now) => now - At > TimeSpan.FromMinutes(11) || At > now.AddMinutes(2);
     public static Reading? Parse(JsonElement e)
     {

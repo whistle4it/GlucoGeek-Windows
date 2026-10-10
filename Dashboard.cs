@@ -36,7 +36,7 @@ internal sealed class Dashboard : Form
         refresh.Enabled = !busy; refresh.Text = busy ? "Refreshing…" : "Refresh now";
         error.Text = message;
         chart.Data = snapshot; chart.Mmol = snapshot != null && settings.IsMmol(snapshot); chart.Invalidate();
-        if (snapshot == null) { headline.Text = "No reading yet"; headline.ForeColor = ForeColor; status.Text = "Connect your LibreLinkUp account in Settings."; details.Text = "Your current glucose and three-hour history will appear here."; return; }
+        if (snapshot == null) { headline.Text = "No reading yet"; headline.ForeColor = ForeColor; status.Text = "Connect your glucose account in Settings."; details.Text = "Your current glucose and three-hour history will appear here."; return; }
         var r = snapshot.Current; bool mmol = settings.IsMmol(snapshot); string unit = mmol ? "mmol/L" : "mg/dL";
         bool stale = r.Stale(DateTimeOffset.UtcNow);
         headline.Text = Snapshot.Format(r.Mgdl, mmol) + (settings.ShowTrend ? " " + r.Arrow : "") + " " + unit;
@@ -47,7 +47,7 @@ internal sealed class Dashboard : Form
         var prev = snapshot.Previous;
         string delta = prev == null ? "Change unavailable" : $"Change: {(r.Mgdl > prev.Mgdl ? "+" : "")}{Snapshot.Format(r.Mgdl - prev.Mgdl, mmol)} {unit} over {(r.At - prev.At).TotalMinutes:F0} min";
         string sensor = snapshot.Sensor is { } started && started <= DateTimeOffset.UtcNow ? $" · Sensor age {(DateTimeOffset.UtcNow - started).TotalDays:F1} days" : "";
-        details.Text = $"Following {snapshot.Patient}\n{delta}\n{stats}\nTarget {Snapshot.Format(snapshot.Low, mmol)}–{Snapshot.Format(snapshot.High, mmol)} {unit}{sensor}";
+        details.Text = $"{settings.Provider}: {snapshot.Patient}\n{delta}\n{stats}\nTarget {Snapshot.Format(snapshot.Low, mmol)}–{Snapshot.Format(snapshot.High, mmol)} {unit}{sensor}";
     }
 }
 

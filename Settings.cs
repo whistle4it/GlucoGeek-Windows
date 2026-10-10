@@ -7,6 +7,15 @@ namespace Librewin;
 
 internal sealed class Settings
 {
+    public string Provider { get; set; } = "LibreLinkUp";
+    public string DexcomUsername { get; set; } = "";
+    public string DexcomPasswordProtected { get; set; } = "";
+    public string DexcomRegion { get; set; } = "";
+    public double DexcomLow { get; set; } = 70;
+    public double DexcomHigh { get; set; } = 180;
+    public bool HasCredentials => Provider == "Dexcom G7" ? DexcomPasswordProtected.Length > 0 : PasswordProtected.Length > 0;
+    public string DexcomPassword => DexcomPasswordProtected.Length == 0 ? "" : Encoding.UTF8.GetString(ProtectedData.Unprotect(Convert.FromBase64String(DexcomPasswordProtected), null, DataProtectionScope.CurrentUser));
+    public void SetDexcomPassword(string password) => DexcomPasswordProtected = Convert.ToBase64String(ProtectedData.Protect(Encoding.UTF8.GetBytes(password), null, DataProtectionScope.CurrentUser));
     public string Email { get; set; } = "";
     public string PasswordProtected { get; set; } = "";
     public string Patient { get; set; } = "";

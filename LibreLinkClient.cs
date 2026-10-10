@@ -6,7 +6,7 @@ using System.Text.Json;
 namespace Librewin;
 
 internal sealed class SessionExpired : Exception { }
-internal sealed class LibreLinkClient : IDisposable
+internal sealed class LibreLinkClient : IGlucoseClient
 {
     private readonly HttpClient http;
     private readonly Settings settings;
