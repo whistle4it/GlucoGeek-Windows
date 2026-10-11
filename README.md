@@ -6,12 +6,26 @@ A Windows tray companion for LibreLinkUp and Dexcom G7 (via Dexcom Share), origi
 
 ## Run
 
-1. Install the Microsoft .NET 9 **Desktop Runtime**, x64, if it is not already present.
-2. Extract the release ZIP into a permanent folder and run `Librewin.exe`.
+1. Download `Librewin-v0.3.0-Setup-x64.exe` from [Releases](https://github.com/whistle4it/Librewin/releases), then run it on Windows 10/11 x64. The installer includes the .NET runtime; no separate runtime installation is needed. It installs for the current Windows user without administrator access.
+2. Choose whether to start with Windows and add a desktop shortcut. Launch Librewin from the Start menu or the installer's finish page.
 3. In Settings, enter your **LibreLinkUp follower account** email and password. If you follow multiple people, enter the exact full patient name.
 4. Click **Save & connect**. Credentials are stored on this PC, protected with Windows DPAPI for the current user. The selected provider receives only its own credentials for sign-in.
 
 Click the tray arrow to open the chart. Closing the window keeps polling in the tray. Right-click the tray icon to refresh, open settings, or quit. Windows may initially hide the icon in the tray overflow. Pin it using Windows taskbar settings if desired.
+
+The installer always uses `%LOCALAPPDATA%\Programs\Librewin`. For updates, quit Librewin and run the new installer; settings and protected credentials in `%LOCALAPPDATA%\Librewin` are retained. Existing startup registration is migrated to the installed executable, replacing older portable paths. Uninstall through Windows Installed apps; saved account settings are retained for a later reinstall. Older extracted portable folders are not automatically deleted. The installer is currently unsigned, so Windows may display a publisher warning. Verify that the file came from this repository's release and matches its SHA-256 file.
+
+The ZIP remains a portable option: install .NET 9 Desktop Runtime x64, extract all files together, and run `Librewin.exe`.
+
+## Build the installer
+
+Install the .NET 9 SDK and [Inno Setup 6](https://jrsoftware.org/isdl.php), then run:
+
+```powershell
+.\build-installer.ps1 -Iscc 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe'
+```
+
+This publishes a self-contained x64 application and creates the setup executable and SHA-256 file in `installer-output`. The installer has a stable application ID so future versions upgrade the same installation. Windows runtime dependencies are bundled and must be updated by rebuilding the installer when runtime security updates are released.
 
 ## Dexcom G7 setup
 
