@@ -1,93 +1,116 @@
 # Librewin
 
-Project: [whistle4it/Librewin](https://github.com/whistle4it/Librewin). Version 0.3.1.
+**Your glucose readings, at a glance on your Windows PC.**
 
-A Windows tray companion for LibreLinkUp and Dexcom G7 (via Dexcom Share), originally a port of [whistle4it/libremac](https://github.com/whistle4it/libremac), based on source commit `2c4f81b4b2678f7d963932ec150b80acf50e86bd`.
+Librewin is a small Windows app that displays readings from **LibreLinkUp** or **Dexcom G7**. A coloured arrow beside the Windows clock shows your glucose trend. Click it to see your latest reading and a three-hour chart.
 
-## Run
+**[Download the Windows installer](https://github.com/whistle4it/Librewin/releases/latest)** · [Report a problem](https://github.com/whistle4it/Librewin/issues)
 
-1. Download `Librewin-v0.3.1-Setup-x64.exe` from [Releases](https://github.com/whistle4it/Librewin/releases), then run it on Windows 10/11 x64. The installer includes the .NET runtime; no separate runtime installation is needed. It installs for the current Windows user without administrator access.
-2. Choose whether to start with Windows and add a desktop shortcut. Launch Librewin from the Start menu or the installer's finish page.
-3. In Settings, enter your **LibreLinkUp follower account** email and password. If you follow multiple people, enter the exact full patient name.
-4. Click **Save & connect**. Credentials are stored on this PC, protected with Windows DPAPI for the current user. The selected provider receives only its own credentials for sign-in.
+> This repository is private. You need to sign in to GitHub with an account that has access to download the installer.
 
-Click the tray arrow to open the chart. Closing the window keeps polling in the tray. Right-click the tray icon to refresh, open settings, or quit. Windows may initially hide the icon in the tray overflow. Pin it using Windows taskbar settings if desired.
+![Librewin dashboard showing a glucose reading, steady trend arrow, three-hour chart and target range using demo data](docs/images/dashboard-demo.png)
 
-The installer always uses `%LOCALAPPDATA%\Programs\Librewin`. For updates, quit Librewin and run the new installer; settings and protected credentials in `%LOCALAPPDATA%\Librewin` are retained. Existing startup registration is migrated to the installed executable, replacing older portable paths. Uninstall through Windows Installed apps; saved account settings are retained for a later reinstall. Older extracted portable folders are not automatically deleted. The installer is currently unsigned, so Windows may display a publisher warning. Verify that the file came from this repository's release and matches its SHA-256 file.
+*Example with made-up readings, shown in mmol/L. You can also choose mg/dL. Sensor age is shown for LibreLinkUp when available; it is not available for Dexcom.*
 
-The ZIP remains a portable option: install .NET 9 Desktop Runtime x64, extract all files together, and run `Librewin.exe`.
+## What you need
 
-## Build the installer
+- A PC running **Windows 10 or Windows 11, 64-bit (x64)**.
+- An internet connection.
+- A LibreLinkUp follower account, or the Dexcom account used by the person wearing a G7 sensor, with Share enabled.
 
-Install the .NET 9 SDK and [Inno Setup 6](https://jrsoftware.org/isdl.php), then run:
+The installer includes everything needed to run Librewin. You do not need to install .NET separately or use a command line.
 
-```powershell
-.\build-installer.ps1 -Iscc 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe'
-```
+## Install Librewin
 
-This publishes a self-contained x64 application and creates the setup executable and SHA-256 file in `installer-output`. The installer has a stable application ID so future versions upgrade the same installation. Windows runtime dependencies are bundled and must be updated by rebuilding the installer when runtime security updates are released.
+1. Open the **[download page](https://github.com/whistle4it/Librewin/releases/latest)**.
+2. Under **Assets**, click the file whose name ends in **`Setup-x64.exe`**. For version 0.3.1, this is `Librewin-v0.3.1-Setup-x64.exe`. Choose this installer; the “Source code” files are for developers.
+3. When the download finishes, open the file from your browser's downloads list or your **Downloads** folder.
+4. Follow the installer. Choose **Start Librewin when I sign in to Windows** if you want it to open automatically. You can also choose to add a desktop shortcut.
+5. Launch **Librewin** from the installer's finish page or the Windows **Start** menu.
+6. Open **Settings…** and follow the instructions for your glucose source below.
 
-## Dexcom G7 setup
+The app installs for your Windows account without needing administrator access. The installer is currently unsigned, so Windows may show an “unknown publisher” warning. Download only from this repository's release page. If your PC blocks installation, check with the person who manages it.
 
-1. In the official G7 app, enable **Connections > Share** and complete its setup. Keep the G7 app uploading readings to the internet.
-2. In Librewin Settings choose **Dexcom G7** as the glucose source.
-3. Enter the **G7 wearer's Dexcom username and password**, not a Dexcom Follow account. These are separate from your saved LibreLinkUp credentials.
-4. Select your Dexcom account region: **US**, **Outside US** (including UK/Europe), or **Japan**. Librewin does not guess your region or try your credentials against other regions.
-5. Choose **mmol/L** or **mg/dL**. For Dexcom, Automatic uses mg/dL because Share does not supply your preferred units.
-6. Review the low/high display bounds (entered in mg/dL regardless of display units) and click **Save & connect**.
+## Connect your glucose account
 
-Dexcom readings use the existing chart, coloured tray arrows, tooltip, and stale/error indicators. Double-up and double-down arrows are preserved. The last three hours are requested; no available readings or malformed readings produce an error. The bounds default to 70–180 mg/dL and affect only Librewin's display; they are not read from or written to the G7 app. Sensor age is omitted because Share does not provide it.
+### LibreLinkUp
 
-This is an **unofficial Dexcom Share cloud integration**, not direct Bluetooth sensor access or the retrospective Dexcom developer API. It requires internet access and Share data from the wearer's account. No API key or OAuth application registration is required. Existing LibreLinkUp accounts remain configured when switching sources. Invalid credentials pause further authentication attempts until you reconnect in Settings, avoiding repeated automatic sign-in attempts.
+1. Choose **LibreLinkUp** under **Glucose source**.
+2. Enter the email address and password for your **LibreLinkUp follower account**. This is the account you use to see shared readings in LibreLinkUp.
+3. If you follow more than one person, enter the person's full name exactly as it appears in LibreLinkUp, in **Exact patient name**.
+4. Choose your **Display units**: **mmol/L**, **mg/dL**, or **Automatic**.
+5. Leave **API version**, **API product** and **API User-Agent** at their existing values unless you are troubleshooting with the developer.
+6. Click **Save & connect**.
 
-Offline fixtures cover authentication, US/Outside US/Japan hosts, session renewal, failure redaction, units, trend mappings, dates, empty/malformed readings and credential separation. **Live G7 account compatibility has not been verified in this build environment.** Windows DPAPI also needs a normal signed-in Windows session for verification.
+The sensor wearer's phone must continue uploading readings for Librewin to receive them.
 
-References: [Dexcom G7 Share setup](https://www.dexcom.com/en-us/m/faqs/how-do-i-share-my-dexcom-g7-glucose-data-with-followers); [pydexcom protocol reference](https://github.com/gagebenne/pydexcom). Librewin implements the protocol in C# without adding pydexcom as a dependency.
+### Dexcom G7
 
-## Features
+1. On the sensor wearer's phone, open the official **Dexcom G7** app and enable **Connections → Share**. Complete the Share setup and keep the phone uploading readings.
+2. In Librewin, choose **Dexcom G7** under **Glucose source**.
+3. Enter the **sensor wearer's Dexcom username and password**. A Dexcom Follow account will not work here.
+4. Select the region for that Dexcom account:
+   - **Outside US** for the UK, Europe and other accounts outside the US and Japan.
+   - **US** for a US account.
+   - **Japan** for a Japanese account.
+5. Choose your **Display units**. Select **mmol/L** if that is what you normally use. For Dexcom, **Automatic** displays **mg/dL**.
+6. Review the **Low bound** and **High bound**. These set the colours and target range in Librewin only. They are entered in **mg/dL**, even if you display mmol/L, and do not change your G7 alerts.
+7. Click **Save & connect**.
 
-- Large coloured trend arrow in the tray; exact glucose, trend and unit in the tooltip and main window.
-- Three-hour chart with shaded target range; gaps longer than 20 minutes are not joined.
-- Reading age, delta, average, percentage of available readings in range, and sensor age.
-- Automatic units, mg/dL, or mmol/L; 1, 2, 5, or 10-minute refresh intervals.
-- Out-of-range colours, stale indication after 11 minutes, and visible refresh failures.
-- Optional launch at Windows sign-in (per-user registry entry; no administrator rights).
-- Protected password storage, sign-out, bounded regional redirects, and one reauthentication attempt on HTTP 401.
+Librewin receives readings over the internet through Dexcom Share; it does not connect directly to the sensor.
 
-The tray shows a large arrow: green in range, red low, amber high. Hover for the exact glucose value and units. A grey exclamation mark indicates a failed refresh; a grey clock indicates stale data; a question mark indicates unavailable trend or readings. The tray always uses colour and trend; the Window trend and Window colours settings control the main window. The main window shows these states explicitly. No alarms, insulin recommendations, or treatment calculations are implemented.
+## Use the app day to day
 
-## Build and check
+The **system tray** is the area beside the clock at the bottom of your Windows screen.
 
-Requires Windows and the .NET 9 SDK, including its Windows Desktop targeting pack. No third-party NuGet packages are required.
+| What you see | What it means |
+| --- | --- |
+| Green arrow | Your reading is within the displayed target range. |
+| Red arrow | Your reading is below the displayed target range. |
+| Amber arrow | Your reading is above the displayed target range. |
+| Arrow pointing up, sideways or down | Glucose is rising, steady or falling. |
+| Grey clock | The last reading is more than 11 minutes old. Check its timestamp. |
+| Grey exclamation mark | The latest refresh failed. Open the app for details. |
+| Question mark | A reading or trend is not available. |
 
-```powershell
-.\build.ps1 -Test
-```
+- **Hover over the tray icon** to see the exact glucose reading and units.
+- **Click the tray icon** to open the chart, reading age and recent statistics.
+- **Right-click the tray icon** to refresh, open settings or choose **Quit Librewin**.
+- Closing the chart window keeps Librewin running in the tray.
+- In **Settings…**, you can change units, refresh frequency and **Start with Windows**.
 
-The application is written in C# / Windows Forms. `dist` contains the framework-dependent release. Keep all files in that directory together. To produce a self-contained x64 build on a machine with package download access:
+**Can't see the icon?** Click the small **^** beside the Windows clock to check hidden icons. You can drag Librewin's icon beside the clock, or use Windows taskbar settings to choose which tray icons are visible.
 
-```powershell
-dotnet publish -c Release -r win-x64 --self-contained true -o dist-self-contained
-```
+## Update or uninstall
 
-`--self-test <absolute-report-path>` runs offline fixture tests, including DPAPI, regional authentication, patient selection, conversions, timestamps, history, and HTTP 401 recovery. It does not contact LibreLinkUp or Dexcom or change settings.
+**To update:** right-click the tray icon and choose **Quit Librewin**, then download and run the latest installer. Your saved account details and preferences are kept. Open Librewin from the Start menu afterward.
 
-`--preview <absolute-png-path>` renders a demo-data dashboard to an image and exits, without network access or saving settings.
+**To uninstall:** open Windows **Settings → Apps**, find **Librewin** in **Installed apps** (Windows 11) or **Apps & features** (Windows 10), and choose **Uninstall**. Saved account settings are retained for a later reinstall. To remove saved credentials for a source, use **Sign out of this source** in Librewin before uninstalling.
 
-## Settings and troubleshooting
+If you previously used a ZIP download, use the installer for future updates and launch the app from the Start menu. Older extracted folders are not automatically removed.
 
-Settings live in `%LOCALAPPDATA%\Librewin\settings.json`. Account names and display preferences are plain text; both provider passwords are separately encrypted for the current Windows user. Session tokens and readings are held in memory and are not persisted. Sign out removes saved credentials for the selected source. Launch at login points to the current executable path: disable it before moving the application, then enable it again afterward.
+## Need help?
 
-API version, product and User-Agent can be edited in Settings to match upstream LibreLinkUp changes without recompiling. Defaults are preserved from LibreMac. Regional endpoints must use HTTPS on `libreview.io` or its subdomains. Unknown units or invalid timestamps are rejected, and patient selection never silently falls back to another person. A sensor's rated lifetime is not assumed.
+| Problem | What to try |
+| --- | --- |
+| You cannot open the download page | Sign in to GitHub and check that your account has access to this private repository. |
+| No readings appear | Check your internet connection and confirm that readings are updating in the official phone app. Check the account and source in Settings. |
+| Dexcom sign-in fails | Use the wearer's account, check the region, and confirm that Share is enabled in the G7 app. After correcting details, click **Save & connect** again. |
+| The wrong person's readings appear | Check **Exact patient name** against LibreLinkUp, then reconnect. |
+| The numbers look unfamiliar | Check whether your usual units are **mmol/L** or **mg/dL** and select them in Settings. |
+| The app says it is already running | Look beside the clock and in hidden tray icons, then click its icon. |
+| Windows opens an older copy | Quit it, run the latest installer, and open Librewin from the Start menu. Remove any old shortcuts you created yourself. |
 
-This is an initial Windows port. Offline tests do not establish compatibility with a live account. Verify sign-in, patient identity, units and timestamps against the official LibreLinkUp app before relying on the display. The release is unsigned.
+If you still need help, **[report a problem](https://github.com/whistle4it/Librewin/issues)**. Include your app version and what happened. Do not post passwords, account details or screenshots containing personal readings.
 
-## Attribution and distribution
+## Privacy and important information
 
-Derived from the LibreMac repository above. Its API implementation credits [DiaKEM/libre-link-up-api-client](https://github.com/DiaKEM/libre-link-up-api-client). The inspected LibreMac revision includes no LICENSE file; this port does not invent or grant a license for that source. Confirm the original source's licensing before public redistribution.
+Passwords are protected for your Windows user account. Readings and sign-in session tokens are kept in memory rather than saved to disk. Account names and display preferences are saved locally.
 
-LibreLinkUp is unofficially accessed through an undocumented API and can change without notice. Librewin is not affiliated with Abbott or Dexcom and is not a medical device. It is a companion display, not a basis for treatment decisions. Use the official app or meter for those decisions. Data depends on the sensor user's phone uploading and may lag the sensor.
+Librewin is an unofficial companion display, not a medical device, and is not affiliated with Abbott or Dexcom. Readings can be delayed if the sensor wearer's phone has not uploaded them. **Use your official app or meter for treatment decisions.** Librewin does not provide alarms, insulin advice or treatment calculations.
 
-## App icon
+## About the project
 
-The application and installer reuse LibreMac's original Resources/AppIcon.icns from source commit 2c4f81b4b2678f7d963932ec150b80acf50e86bd, converted to a Windows ICO with 16, 24, 32, 48, 64, 128 and 256 pixel sizes. Resources/AppIcon.png is a preview. The tray continues to show the current glucose colour and trend arrow.
+Librewin is the Windows port of **[LibreMac](https://github.com/whistle4it/libremac)** and uses its original app icon.
+
+Looking for build instructions, technical details or source attribution? See the **[developer guide](docs/DEVELOPER.md)**.
