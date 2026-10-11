@@ -63,15 +63,20 @@ Librewin receives readings over the internet through Dexcom Share; it does not c
 
 The **system tray** is the area beside the clock at the bottom of your Windows screen.
 
-| What you see | What it means |
-| --- | --- |
-| Green arrow | Your reading is within the displayed target range. |
-| Red arrow | Your reading is below the displayed target range. |
-| Amber arrow | Your reading is above the displayed target range. |
-| Arrow pointing up, sideways or down | Glucose is rising, steady or falling. |
-| Grey clock | The last reading is more than 11 minutes old. Check its timestamp. |
-| Grey exclamation mark | The latest refresh failed. Open the app for details. |
-| Question mark | A reading or trend is not available. |
+| Icon | What you see | What it means |
+| :---: | --- | --- |
+| <img src="docs/images/tray/in-range.png" width="32" height="32" alt="Green arrow pointing right"> | Green arrow | Your reading is within the displayed target range. |
+| <img src="docs/images/tray/low.png" width="32" height="32" alt="Red arrow pointing down"> | Red arrow | Your reading is below the displayed target range. |
+| <img src="docs/images/tray/high.png" width="32" height="32" alt="Amber arrow pointing up diagonally"> | Amber arrow | Your reading is above the displayed target range. |
+| <img src="docs/images/tray/rising.png" width="32" height="32" alt="Arrow pointing up"> | Upward arrow | Glucose is rising. |
+| <img src="docs/images/tray/steady.png" width="32" height="32" alt="Arrow pointing right"> | Sideways arrow | Glucose is steady. |
+| <img src="docs/images/tray/falling.png" width="32" height="32" alt="Arrow pointing down"> | Downward arrow | Glucose is falling. |
+| <img src="docs/images/tray/stale.png" width="32" height="32" alt="Grey clock"> | Grey clock | The last reading is more than 11 minutes old. Check its timestamp. |
+| <img src="docs/images/tray/error.png" width="32" height="32" alt="Grey exclamation mark"> | Grey exclamation mark | The latest refresh failed. Open the app for details. |
+| <img src="docs/images/tray/unknown.png" width="32" height="32" alt="Grey question mark"> | Question mark | A reading or trend is not available. |
+
+*These are the actual app icons, enlarged for clarity. Read the colour and direction together: for example, a red upward arrow means glucose is low but rising. Diagonal arrows show a gentler rise or fall; double arrows show a faster rise or fall.*
+
 
 - **Hover over the tray icon** to see the exact glucose reading and units.
 - **Click the tray icon** to open the chart, reading age and recent statistics.
@@ -114,3 +119,4 @@ Librewin is an unofficial companion display, not a medical device, and is not af
 Librewin is the Windows port of **[LibreMac](https://github.com/whistle4it/libremac)** and uses its original app icon.
 
 Looking for build instructions, technical details or source attribution? See the **[developer guide](docs/DEVELOPER.md)**.
+
