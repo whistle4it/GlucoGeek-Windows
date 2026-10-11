@@ -1,5 +1,5 @@
 #ifndef AppVersion
-  #define AppVersion "0.3.0"
+  #define AppVersion "0.3.1"
 #endif
 #ifndef PublishDir
   #define PublishDir "..\dist-installer"
@@ -28,6 +28,7 @@ OutputBaseFilename=Librewin-v{#AppVersion}-Setup-x64
 Compression=lzma2
 SolidCompression=yes
 WizardStyle=modern
+SetupIconFile=..\Resources\AppIcon.ico
 UninstallDisplayIcon={app}\Librewin.exe
 AppMutex=Local\Librewin
 CloseApplications=yes

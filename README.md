@@ -1,12 +1,12 @@
 # Librewin
 
-Project: [whistle4it/Librewin](https://github.com/whistle4it/Librewin). Version 0.3.0.
+Project: [whistle4it/Librewin](https://github.com/whistle4it/Librewin). Version 0.3.1.
 
 A Windows tray companion for LibreLinkUp and Dexcom G7 (via Dexcom Share), originally a port of [whistle4it/libremac](https://github.com/whistle4it/libremac), based on source commit `2c4f81b4b2678f7d963932ec150b80acf50e86bd`.
 
 ## Run
 
-1. Download `Librewin-v0.3.0-Setup-x64.exe` from [Releases](https://github.com/whistle4it/Librewin/releases), then run it on Windows 10/11 x64. The installer includes the .NET runtime; no separate runtime installation is needed. It installs for the current Windows user without administrator access.
+1. Download `Librewin-v0.3.1-Setup-x64.exe` from [Releases](https://github.com/whistle4it/Librewin/releases), then run it on Windows 10/11 x64. The installer includes the .NET runtime; no separate runtime installation is needed. It installs for the current Windows user without administrator access.
 2. Choose whether to start with Windows and add a desktop shortcut. Launch Librewin from the Start menu or the installer's finish page.
 3. In Settings, enter your **LibreLinkUp follower account** email and password. If you follow multiple people, enter the exact full patient name.
 4. Click **Save & connect**. Credentials are stored on this PC, protected with Windows DPAPI for the current user. The selected provider receives only its own credentials for sign-in.
@@ -87,3 +87,7 @@ This is an initial Windows port. Offline tests do not establish compatibility wi
 Derived from the LibreMac repository above. Its API implementation credits [DiaKEM/libre-link-up-api-client](https://github.com/DiaKEM/libre-link-up-api-client). The inspected LibreMac revision includes no LICENSE file; this port does not invent or grant a license for that source. Confirm the original source's licensing before public redistribution.
 
 LibreLinkUp is unofficially accessed through an undocumented API and can change without notice. Librewin is not affiliated with Abbott or Dexcom and is not a medical device. It is a companion display, not a basis for treatment decisions. Use the official app or meter for those decisions. Data depends on the sensor user's phone uploading and may lag the sensor.
+
+## App icon
+
+The application and installer reuse LibreMac's original Resources/AppIcon.icns from source commit 2c4f81b4b2678f7d963932ec150b80acf50e86bd, converted to a Windows ICO with 16, 24, 32, 48, 64, 128 and 256 pixel sizes. Resources/AppIcon.png is a preview. The tray continues to show the current glucose colour and trend arrow.

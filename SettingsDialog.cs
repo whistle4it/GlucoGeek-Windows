@@ -5,6 +5,7 @@ internal sealed class SettingsDialog : Form
     public Settings Result { get; private set; }
     public SettingsDialog(Settings current)
     {
+        Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
         Result = current.Copy(); Text = "Librewin settings"; ClientSize = new Size(610, 650);
         FormBorderStyle = FormBorderStyle.FixedDialog; MaximizeBox = false; MinimizeBox = false;
         StartPosition = FormStartPosition.CenterParent; AutoScaleMode = AutoScaleMode.Dpi; Font = new Font("Segoe UI", 10);

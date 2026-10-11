@@ -14,6 +14,7 @@ internal sealed class Dashboard : Form
     private readonly Button refresh = new() { Text = "Refresh now", AutoSize = true };
     public Dashboard()
     {
+        Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
         Text = "Librewin"; ClientSize = new Size(580, 650); MinimumSize = new Size(550, 640);
         StartPosition = FormStartPosition.CenterScreen; BackColor = Color.FromArgb(16, 25, 36); ForeColor = Color.FromArgb(230, 238, 247);
         Font = new Font("Segoe UI", 10); AutoScaleMode = AutoScaleMode.Dpi;
