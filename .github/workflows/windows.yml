@@ -52,21 +52,21 @@ jobs:
           if ($text -match '[A-Za-z]:\\Users\\') { throw 'Developer user path embedded in app DLL' }
           & "$env:RUNNER_TEMP/gitleaks/gitleaks.exe" dir dist-installer --redact=100 --no-banner
           if ($LASTEXITCODE -ne 0) { throw 'Publish payload secret scan failed' }
-      - name: Download previous installer for upgrade test
+      - name: Download privacy-rebuilt legacy installer for upgrade test
         shell: pwsh
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release download v0.3.1 --repo "$env:GITHUB_REPOSITORY" --pattern 'Librewin-v0.3.1-Setup-x64.exe*' --dir "$env:RUNNER_TEMP/legacy"
+          gh release download v0.3.1 --repo "$env:GITHUB_REPOSITORY" --pattern 'Librewin-v0.3.1-privacy-rebuild-Setup-x64.exe*' --dir "$env:RUNNER_TEMP/legacy"
           if ($LASTEXITCODE -ne 0) { throw 'Previous release download failed' }
-          $sum = (Get-Content "$env:RUNNER_TEMP/legacy/Librewin-v0.3.1-Setup-x64.exe.sha256").Split(' ')[0]
-          if ((Get-FileHash "$env:RUNNER_TEMP/legacy/Librewin-v0.3.1-Setup-x64.exe").Hash -ne $sum) { throw 'Previous installer checksum mismatch' }
+          $sum = (Get-Content "$env:RUNNER_TEMP/legacy/Librewin-v0.3.1-privacy-rebuild-Setup-x64.exe.sha256").Split(' ')[0]
+          if ((Get-FileHash "$env:RUNNER_TEMP/legacy/Librewin-v0.3.1-privacy-rebuild-Setup-x64.exe").Hash -ne $sum) { throw 'Previous installer checksum mismatch' }
       - name: Fresh install, startup, upgrade, uninstall and reinstall
         shell: pwsh
         run: |
           [xml]$project = Get-Content GlucoGeek.csproj
           $version = $project.Project.PropertyGroup.Version
-          ./scripts/Test-Installer.ps1 -Installer "$PWD/installer-output/GlucoGeek-v$version-Setup-x64.exe" -LegacyInstaller "$env:RUNNER_TEMP/legacy/Librewin-v0.3.1-Setup-x64.exe"
+          ./scripts/Test-Installer.ps1 -Installer "$PWD/installer-output/GlucoGeek-v$version-Setup-x64.exe" -LegacyInstaller "$env:RUNNER_TEMP/legacy/Librewin-v0.3.1-privacy-rebuild-Setup-x64.exe"
       - name: Save validation results
         if: always()
         uses: actions/upload-artifact@v4
