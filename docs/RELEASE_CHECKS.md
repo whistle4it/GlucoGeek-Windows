@@ -18,9 +18,17 @@ passed on a disposable Windows runner:
 - Preservation of a synthetic saved profile and decryptable DPAPI-protected credential.
 - Uninstall, reinstall, and preservation of saved settings.
 
-This runs silent installation paths. Executing the stored startup command is not
-an actual reboot or sign-out/sign-in. Interactive installer appearance and real
-sign-in behaviour must be checked on a desktop separately.
+The final build also passed [run 40194478837](https://github.com/whistle4it/GlucoGeek-Windows/actions/runs/40194478837), including the new publish-payload privacy checks.
+
+The interactive installer was then checked and completed on the maintainer’s
+Windows 11 PC. GlucoGeek 0.4.1 launched from the installed folder, the old named
+executable in that folder was removed, licence files were present, and the
+existing settings file was byte-for-byte unchanged. The desktop app displayed
+Dexcom G7 data without stale or refresh-failure indicators; no personal readings
+were saved in this report. Live LibreLinkUp was not retested.
+
+Executing the stored startup command is not an actual reboot or sign-out/sign-in.
+That final real sign-in check remains pending with the maintainer.
 
 ## Repository and payload review
 
@@ -29,8 +37,8 @@ scanned locally as an additional check. The runner then scanned real Git history
 Committed screenshots use clearly labelled demo readings; PNG metadata contains
 no account information. No saved account settings or credentials are tracked.
 
-The local publish payload and historical portable ZIP were scanned. No credential
-patterns were found. Historical builds can contain compiler build-path metadata;
+The local publish payload and historical portable ZIP (277 files, approximately
+120 MB) were scanned. No credential patterns were found. Historical builds can contain compiler build-path metadata;
 new builds map the developer path to /_/GlucoGeek. No history was rewritten.
 
 ## Licensing

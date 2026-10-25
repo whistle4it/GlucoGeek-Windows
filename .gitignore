@@ -5,3 +5,13 @@ dist-installer/
 installer-output/
 test-results.txt
 *.user
+
+# Local account data, diagnostic output and signing material
+settings.json
+*.log
+*.pdb
+.env
+.env.*
+*.pfx
+*.p12
+*.key
