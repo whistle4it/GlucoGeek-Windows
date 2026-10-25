@@ -30,7 +30,7 @@ This publishes a self-contained x64 app and produces the setup executable and SH
 
 The installer uses `%LOCALAPPDATA%\Programs\Librewin`. Settings remain in `%LOCALAPPDATA%\Librewin`. Existing startup registration is migrated to the installed executable. Older portable folders are not deleted. The installer is unsigned. Rebuild bundled runtime dependencies when runtime security updates are released.
 
-The v0.4.0 Windows build, 55 offline checks, installer compilation and tray smoke check passed. Full interactive install/upgrade/uninstall testing remains outstanding.
+The v0.4.0 Windows build, 55 offline checks, installer compilation and tray smoke check passed. Automated fresh install, upgrade, startup-command, uninstall and reinstall checks pass on a disposable Windows runner. See RELEASE_CHECKS.md for the remaining desktop/reboot checks.
 
 ### Test and preview modes
 
@@ -70,4 +70,4 @@ The project owner confirmed ownership or permission to release the inherited sou
 
 ## Rename compatibility
 
-The app is GlucoGeek; the repositories use GlucoGeek-Windows and GlucoGeek-macOS. Windows keeps the original installer AppId, installation/profile folders and single-instance lock so the rename upgrades the existing app. Startup settings recognize the old Librewin entry; the installer replaces it with GlucoGeek and removes old named shortcuts and executable files. Full interactive upgrade testing remains outstanding.
+The app is GlucoGeek; the repositories use GlucoGeek-Windows and GlucoGeek-macOS. Windows keeps the original installer AppId, installation/profile folders and single-instance lock so the rename upgrades the existing app. Startup settings recognize the old Librewin entry; the installer replaces it with GlucoGeek and removes old named shortcuts and executable files. Automated upgrade checks pass; real reboot verification remains separate.

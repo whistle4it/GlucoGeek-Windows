@@ -4,9 +4,9 @@
 
 GlucoGeek is a small Windows app that displays readings from **LibreLinkUp** or **Dexcom G7**. A coloured arrow beside the Windows clock shows your glucose trend. Click it to see your latest reading and a three-hour chart.
 
-**[Download the Windows installer](https://github.com/whistle4it/GlucoGeek-Windows/releases/latest)** · [Report a problem](https://github.com/whistle4it/GlucoGeek-Windows/issues)
+**[Download the Windows installer](https://github.com/whistle4it/GlucoGeek-Windows/releases/tag/v0.4.1)** · [Report a problem](https://github.com/whistle4it/GlucoGeek-Windows/issues)
 
-> **Public beta preparation:** GlucoGeek is free software under the MIT licence. Downloads remain restricted until the maintainer makes this repository public. It is an unofficial companion display; use your official app or meter for treatment decisions.
+> **Beta software:** Free and open source under the MIT licence. See the [release checks and limitations](docs/RELEASE_CHECKS.md). Use your official app or meter for treatment decisions.
 
 ![GlucoGeek dashboard showing a glucose reading, steady trend arrow, three-hour chart and target range using demo data](docs/images/dashboard-demo.png)
 
@@ -24,7 +24,7 @@ The installer includes everything needed to run GlucoGeek. You do not need to in
 
 ## Install GlucoGeek
 
-1. Open the **[download page](https://github.com/whistle4it/GlucoGeek-Windows/releases/latest)**.
+1. Open the **[download page](https://github.com/whistle4it/GlucoGeek-Windows/releases/tag/v0.4.1)**.
 2. Under **Assets**, click the file whose name ends in **`Setup-x64.exe`**. For version 0.4.1, this is `GlucoGeek-v0.4.1-Setup-x64.exe`. Choose this installer; the “Source code” files are for developers.
 3. When the download finishes, open the file from your browser's downloads list or your **Downloads** folder.
 4. Follow the installer. Choose **Start GlucoGeek when I sign in to Windows** if you want it to open automatically. You can also choose to add a desktop shortcut.
@@ -100,7 +100,7 @@ If you previously used a ZIP download, use the installer for future updates and 
 
 | Problem | What to try |
 | --- | --- |
-| You cannot open the download page | Check the repository address. During private beta preparation, sign in with an account that has repository access. |
+| You cannot open the download page | Check the repository address. If the repository is still private during release preparation, sign in with an account that has access. |
 | No readings appear | Check your internet connection and confirm that readings are updating in the official phone app. Check the account and source in Settings. |
 | Dexcom sign-in fails | Use the wearer's account, check the region, and confirm that Share is enabled in the G7 app. After correcting details, click **Save & connect** again. |
 | The wrong person's readings appear | Check **Exact patient name** against LibreLinkUp, then reconnect. |

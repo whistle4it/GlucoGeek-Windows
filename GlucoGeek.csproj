@@ -9,6 +9,8 @@
     <ApplicationIcon>Resources\AppIcon.ico</ApplicationIcon>
     <Version>0.4.1</Version>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    <PathMap>$(MSBuildProjectDirectory)=/_/GlucoGeek</PathMap>
     <Product>GlucoGeek for Windows</Product>
   </PropertyGroup>
 </Project>

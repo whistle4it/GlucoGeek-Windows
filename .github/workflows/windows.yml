@@ -44,6 +44,14 @@ jobs:
             if ($LASTEXITCODE -ne 0) { throw 'Inno Setup installation failed' }
           }
           ./build-installer.ps1 -Iscc $iscc
+      - name: Check publish payload privacy
+        shell: pwsh
+        run: |
+          $bytes = [IO.File]::ReadAllBytes("$PWD/dist-installer/GlucoGeek.dll")
+          $text = [Text.Encoding]::UTF8.GetString($bytes)
+          if ($text -match '[A-Za-z]:\\Users\\') { throw 'Developer user path embedded in app DLL' }
+          & "$env:RUNNER_TEMP/gitleaks/gitleaks.exe" dir dist-installer --redact=100 --no-banner
+          if ($LASTEXITCODE -ne 0) { throw 'Publish payload secret scan failed' }
       - name: Download previous installer for upgrade test
         shell: pwsh
         env:
