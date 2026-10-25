@@ -1,4 +1,4 @@
-namespace Librewin;
+namespace GlucoGeek;
 
 internal interface IGlucoseClient : IDisposable
 {

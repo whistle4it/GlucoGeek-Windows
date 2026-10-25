@@ -1,10 +1,10 @@
-# Librewin developer guide
+# GlucoGeek developer guide
 
 For installation and account setup, see the [README](../README.md).
 
 ## Build and test
 
-Requires Windows and the .NET 9 SDK with its Windows Desktop targeting pack. Librewin uses C# / Windows Forms and no third-party NuGet packages.
+Requires Windows and the .NET 9 SDK with its Windows Desktop targeting pack. GlucoGeek uses C# / Windows Forms and no third-party NuGet packages.
 
 ```powershell
 .\build.ps1 -Test
@@ -30,7 +30,7 @@ This publishes a self-contained x64 app and produces the setup executable and SH
 
 The installer uses `%LOCALAPPDATA%\Programs\Librewin`. Settings remain in `%LOCALAPPDATA%\Librewin`. Existing startup registration is migrated to the installed executable. Older portable folders are not deleted. The installer is unsigned. Rebuild bundled runtime dependencies when runtime security updates are released.
 
-The v0.3.1 release build, installer compilation, icon sizes and tray smoke check passed. Full interactive install/upgrade/uninstall testing remains outstanding.
+The v0.4.0 Windows build, 55 offline checks, installer compilation and tray smoke check passed. Full interactive install/upgrade/uninstall testing remains outstanding.
 
 ### Test and preview modes
 
@@ -50,7 +50,7 @@ Dexcom G7 uses an unofficial Dexcom Share cloud integration, not direct Bluetoot
 
 Credentials for the two sources are stored separately. Invalid credentials pause automatic sign-in attempts until the user reconnects in Settings. Offline fixtures cover authentication, regional hosts, session renewal, failure redaction, units, trends, dates, malformed/empty readings and credential separation. Offline tests alone do not establish live service compatibility.
 
-References: [Dexcom G7 Share setup](https://www.dexcom.com/en-us/m/faqs/how-do-i-share-my-dexcom-g7-glucose-data-with-followers), [pydexcom protocol reference](https://github.com/gagebenne/pydexcom). Librewin implements the protocol in C# without depending on pydexcom.
+References: [Dexcom G7 Share setup](https://www.dexcom.com/en-us/m/faqs/how-do-i-share-my-dexcom-g7-glucose-data-with-followers), [pydexcom protocol reference](https://github.com/gagebenne/pydexcom). GlucoGeek implements the protocol in C# without depending on pydexcom.
 
 ## Display and settings
 
@@ -62,8 +62,13 @@ Settings are stored in `%LOCALAPPDATA%\Librewin\settings.json`. Account names an
 
 ## Attribution and distribution
 
-Derived from [whistle4it/libremac](https://github.com/whistle4it/libremac), source commit `2c4f81b4b2678f7d963932ec150b80acf50e86bd`. LibreMac's API implementation credits [DiaKEM/libre-link-up-api-client](https://github.com/DiaKEM/libre-link-up-api-client).
+Derived from [GlucoGeek for macOS (formerly LibreMac)](https://github.com/whistle4it/GlucoGeek-macOS), source commit `2c4f81b4b2678f7d963932ec150b80acf50e86bd`. GlucoGeek for macOS's API implementation credits [DiaKEM/libre-link-up-api-client](https://github.com/DiaKEM/libre-link-up-api-client).
 
-The application and installer reuse LibreMac's original `Resources/AppIcon.icns`, converted to `Resources/AppIcon.ico` with 16, 24, 32, 48, 64, 128 and 256 pixel sizes. `Resources/AppIcon.png` is a preview.
+The application and installer reuse GlucoGeek for macOS's original `Resources/AppIcon.icns`, converted to `Resources/AppIcon.ico` with 16, 24, 32, 48, 64, 128 and 256 pixel sizes. `Resources/AppIcon.png` is a preview.
 
-The inspected LibreMac revision includes no LICENSE file. This port does not invent or grant a license for that source. Confirm licensing before public redistribution. The Librewin repository and release downloads remain private.
+The inspected GlucoGeek for macOS revision includes no LICENSE file. This port does not invent or grant a license for that source. Confirm licensing before public redistribution. The GlucoGeek repository and release downloads remain private.
+
+## Rename compatibility
+
+The app is GlucoGeek; the repositories use GlucoGeek-Windows and GlucoGeek-macOS. Windows keeps the original installer AppId, installation/profile folders and single-instance lock so the rename upgrades the existing app. Startup settings recognize the old Librewin entry; the installer replaces it with GlucoGeek and removes old named shortcuts and executable files. Full interactive upgrade testing remains outstanding.
+

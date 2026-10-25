@@ -1,6 +1,6 @@
 using System.Drawing.Drawing2D;
 
-namespace Librewin;
+namespace GlucoGeek;
 
 internal static class TrayArtwork
 {

@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 
-namespace Librewin;
+namespace GlucoGeek;
 
 internal static class Program
 {
@@ -40,10 +40,11 @@ internal static class Program
             bitmap.Save(args.Last());
             return 0;
         }
+        // Share the previous name's lock to prevent two versions polling at once.
         using var mutex = new Mutex(true, @"Local\Librewin", out bool first);
-        if (!first) { MessageBox.Show("Librewin is already running. Click its system tray icon.", "Librewin"); return 0; }
+        if (!first) { MessageBox.Show("GlucoGeek is already running. Click its system tray icon.", "GlucoGeek"); return 0; }
         try { Application.Run(new TrayApp(Settings.Load(), args.Contains("--background"))); }
-        catch (Exception ex) { MessageBox.Show("Librewin could not start: " + ex.Message, "Librewin", MessageBoxButtons.OK, MessageBoxIcon.Error); return 1; }
+        catch (Exception ex) { MessageBox.Show("GlucoGeek could not start: " + ex.Message, "GlucoGeek", MessageBoxButtons.OK, MessageBoxIcon.Error); return 1; }
         return 0;
     }
 }
@@ -52,7 +53,7 @@ internal sealed class TrayApp : ApplicationContext
 {
     private Settings settings;
     private IGlucoseClient client;
-    private readonly NotifyIcon tray = new() { Visible = true, Text = "Librewin" };
+    private readonly NotifyIcon tray = new() { Visible = true, Text = "GlucoGeek" };
     private Icon? currentIcon;
     private readonly Dashboard dashboard = new();
     private readonly System.Windows.Forms.Timer timer = new() { Interval = 15000 };
@@ -69,11 +70,11 @@ internal sealed class TrayApp : ApplicationContext
         _ = dashboard.Handle;
         SynchronizationContext.SetSynchronizationContext(new WindowsFormsSynchronizationContext());
         var menu = new ContextMenuStrip();
-        menu.Items.Add("Open Librewin", null, (_, _) => Open());
+        menu.Items.Add("Open GlucoGeek", null, (_, _) => Open());
         menu.Items.Add("Refresh now", null, async (_, _) => await Refresh());
         menu.Items.Add("Settings…", null, async (_, _) => await Configure());
         menu.Items.Add(new ToolStripSeparator());
-        menu.Items.Add("Quit Librewin", null, (_, _) => ExitThread());
+        menu.Items.Add("Quit GlucoGeek", null, (_, _) => ExitThread());
         tray.ContextMenuStrip = menu;
         tray.MouseClick += (_, e) => { if (e.Button == MouseButtons.Left) Open(); };
         dashboard.RefreshRequested += async () => await Refresh();
@@ -137,7 +138,7 @@ internal sealed class TrayApp : ApplicationContext
             currentIcon = icon;
         }
         finally { DestroyIcon(handle); }
-        string tooltip = "Librewin: " + value + (snapshot == null ? "" : " " + (settings.IsMmol(snapshot) ? "mmol/L" : "mg/dL") + (settings.ShowTrend ? " " + snapshot.Current.Arrow : "")) + (error.Length > 0 ? " — refresh failed" : stale ? " — stale / unavailable" : "");
+        string tooltip = "GlucoGeek: " + value + (snapshot == null ? "" : " " + (settings.IsMmol(snapshot) ? "mmol/L" : "mg/dL") + (settings.ShowTrend ? " " + snapshot.Current.Arrow : "")) + (error.Length > 0 ? " — refresh failed" : stale ? " — stale / unavailable" : "");
         tray.Text = tooltip[..Math.Min(63, tooltip.Length)];
     }
     [DllImport("user32.dll")] private static extern bool DestroyIcon(IntPtr icon);

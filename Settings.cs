@@ -3,7 +3,7 @@ using System.Text;
 using System.Text.Json;
 using Microsoft.Win32;
 
-namespace Librewin;
+namespace GlucoGeek;
 
 internal sealed class Settings
 {
@@ -26,6 +26,7 @@ internal sealed class Settings
     public string ApiVersion { get; set; } = "4.16.0";
     public string ApiProduct { get; set; } = "llu.ios";
     public string UserAgent { get; set; } = "Mozilla/5.0 (iPhone; CPU OS 17_4.1 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/17.4.1 Mobile/10A5355d Safari/8536.25";
+    // Preserve the original profile so upgrading keeps both providers' protected credentials.
     public static string Location => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Librewin", "settings.json");
     public static Settings Load() => File.Exists(Location) ? JsonSerializer.Deserialize<Settings>(File.ReadAllText(Location)) ?? new() : new();
     public string Password => PasswordProtected.Length == 0 ? "" : Encoding.UTF8.GetString(ProtectedData.Unprotect(Convert.FromBase64String(PasswordProtected), null, DataProtectionScope.CurrentUser));
@@ -40,12 +41,13 @@ internal sealed class Settings
     public bool IsMmol(Snapshot snapshot) => Unit == "mmol/L" || Unit == "Automatic" && snapshot.Mmol;
     public static bool Startup
     {
-        get { using var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run"); return key?.GetValue("Librewin") is string; }
+        get { using var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run"); return key?.GetValue("GlucoGeek") is string || key?.GetValue("Librewin") is string; }
         set
         {
             using var key = Registry.CurrentUser.CreateSubKey(@"Software\Microsoft\Windows\CurrentVersion\Run");
-            if (value) key.SetValue("Librewin", "\"" + Application.ExecutablePath + "\" --background");
-            else key.DeleteValue("Librewin", false);
+            if (value) key.SetValue("GlucoGeek", "\"" + Application.ExecutablePath + "\" --background");
+            else key.DeleteValue("GlucoGeek", false);
+            key.DeleteValue("Librewin", false);
         }
     }
 }

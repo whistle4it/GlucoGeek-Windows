@@ -2,7 +2,7 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 
-namespace Librewin;
+namespace GlucoGeek;
 
 internal static class SelfTests
 {

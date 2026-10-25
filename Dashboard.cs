@@ -1,6 +1,6 @@
 using System.Drawing.Drawing2D;
 
-namespace Librewin;
+namespace GlucoGeek;
 
 internal sealed class Dashboard : Form
 {
@@ -15,13 +15,13 @@ internal sealed class Dashboard : Form
     public Dashboard()
     {
         Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
-        Text = "Librewin"; ClientSize = new Size(580, 650); MinimumSize = new Size(550, 640);
+        Text = "GlucoGeek"; ClientSize = new Size(580, 650); MinimumSize = new Size(550, 640);
         StartPosition = FormStartPosition.CenterScreen; BackColor = Color.FromArgb(16, 25, 36); ForeColor = Color.FromArgb(230, 238, 247);
         Font = new Font("Segoe UI", 10); AutoScaleMode = AutoScaleMode.Dpi;
         var layout = new TableLayoutPanel { Dock = DockStyle.Fill, Padding = new Padding(24), ColumnCount = 1, RowCount = 8 };
         foreach (int h in new[] { 30, 82, 40, 210, 125, 50, 45 }) layout.RowStyles.Add(new RowStyle(SizeType.Absolute, h));
         layout.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
-        layout.Controls.Add(new Label { Text = "LIBREWIN   /   GLUCOSE", Dock = DockStyle.Fill, ForeColor = Color.FromArgb(114, 210, 188) });
+        layout.Controls.Add(new Label { Text = "GLUCOGEEK   /   GLUCOSE", Dock = DockStyle.Fill, ForeColor = Color.FromArgb(114, 210, 188) });
         layout.Controls.Add(headline); layout.Controls.Add(status); layout.Controls.Add(chart); layout.Controls.Add(details); layout.Controls.Add(error);
         var buttons = new FlowLayoutPanel { Dock = DockStyle.Fill };
         var settings = new Button { Text = "Settings…", AutoSize = true };

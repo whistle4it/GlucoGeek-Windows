@@ -4,7 +4,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Globalization;
 
-namespace Librewin;
+namespace GlucoGeek;
 
 // Independent Share protocol implementation; protocol reference: gagebenne/pydexcom.
 // This is an unofficial cloud integration, not a direct sensor connection.

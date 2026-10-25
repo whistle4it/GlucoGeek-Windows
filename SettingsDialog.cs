@@ -1,4 +1,4 @@
-namespace Librewin;
+namespace GlucoGeek;
 
 internal sealed class SettingsDialog : Form
 {
@@ -6,7 +6,7 @@ internal sealed class SettingsDialog : Form
     public SettingsDialog(Settings current)
     {
         Icon = Icon.ExtractAssociatedIcon(Application.ExecutablePath);
-        Result = current.Copy(); Text = "Librewin settings"; ClientSize = new Size(610, 650);
+        Result = current.Copy(); Text = "GlucoGeek settings"; ClientSize = new Size(610, 650);
         FormBorderStyle = FormBorderStyle.FixedDialog; MaximizeBox = false; MinimizeBox = false;
         StartPosition = FormStartPosition.CenterParent; AutoScaleMode = AutoScaleMode.Dpi; Font = new Font("Segoe UI", 10);
         var root = new TableLayoutPanel { Dock = DockStyle.Fill, Padding = new Padding(20), ColumnCount = 1, RowCount = 5 };

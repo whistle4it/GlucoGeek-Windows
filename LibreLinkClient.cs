@@ -3,7 +3,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 
-namespace Librewin;
+namespace GlucoGeek;
 
 internal sealed class SessionExpired : Exception { }
 internal sealed class LibreLinkClient : IGlucoseClient
