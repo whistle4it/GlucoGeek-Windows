@@ -38,14 +38,33 @@ the standard installed upgrade path, not every manually configured portable copy
 
 ## Repository and payload review
 
-All 8 pre-preparation commits and 69 unique historical files were retrieved and
-scanned locally as an additional check. The runner then scanned real Git history.
-Committed screenshots use clearly labelled demo readings; PNG metadata contains
-no account information. No saved account settings or credentials are tracked.
+Source and historical file snapshots were retrieved and scanned locally, and the
+runner scanned full Git history. The final pre-publication recheck covered 12
+commits and 88 unique historical file snapshots before the workflow-only update.
+No real credentials, saved account settings or personal glucose readings were
+found. Test fixtures use synthetic accounts. Commit authors use GitHub no-reply
+addresses. Committed screenshots show clearly labelled demo readings, and PNG
+metadata contains no account information.
 
-The local publish payload and historical portable ZIP (277 files, approximately
-120 MB) were scanned. No credential patterns were found. Historical builds can contain compiler build-path metadata;
-new builds map the developer path to /_/GlucoGeek. No history was rewritten.
+The original v0.3.0 portable ZIP contained a developer user-directory path in its
+compiled debug metadata. Before publication, the v0.3.0, v0.3.1 and v0.4.0 downloads
+were rebuilt with generic compiler paths. The application C# source and version
+were preserved; project/upstream/runtime notices were included, and the portable
+ZIP omits debug symbols. Release notes identify the source revisions and new
+checksums. These are privacy rebuilds, not the original binary artifacts.
+
+All three rebuilt applications passed 55 offline checks and tray launch/shutdown
+smoke checks. Their publish payloads and the rebuilt portable ZIP contained no
+Windows user-directory paths or matches to the maintainer's saved account fields;
+secret scans also passed. GitHub's upload digests matched the local checksums.
+The seven original release assets were removed before the repository became public;
+source tags and commit history were not rewritten. The current v0.4.1 installer and
+its checksum are unchanged.
+
+[Run 40226888882](https://github.com/whistle4it/GlucoGeek-Windows/actions/runs/40226888882)
+passed with the privacy-rebuilt v0.3.1 installer as its legacy upgrade fixture,
+including fresh install, startup, upgrade, protected-credential preservation,
+uninstall and reinstall.
 
 ## Licensing
 
@@ -61,6 +80,7 @@ packages.
 - Offline tests do not establish live LibreLinkUp or Dexcom compatibility.
 - The integrations are unofficial and can change without notice.
 - Only the latest beta is maintained. Older downloads are historical builds.
-- This repository remains private until the owner explicitly chooses to publish it.
+- The owner approved publication after the privacy review; this Windows repository
+  became public on 25 October 2026. The separate macOS repository was not changed.
 
 See the latest Windows workflow run for validation of subsequent commits.

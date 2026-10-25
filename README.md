@@ -100,7 +100,7 @@ If you previously used a ZIP download, use the installer for future updates and 
 
 | Problem | What to try |
 | --- | --- |
-| You cannot open the download page | Check the repository address. If the repository is still private during release preparation, sign in with an account that has access. |
+| You cannot open the download page | Use this Windows repository's release page. Its installer downloads are public and do not require repository access. |
 | No readings appear | Check your internet connection and confirm that readings are updating in the official phone app. Check the account and source in Settings. |
 | Dexcom sign-in fails | Use the wearer's account, check the region, and confirm that Share is enabled in the G7 app. After correcting details, click **Save & connect** again. |
 | The wrong person's readings appear | Check **Exact patient name** against LibreLinkUp, then reconnect. |
