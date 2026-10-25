@@ -27,8 +27,14 @@ existing settings file was byte-for-byte unchanged. The desktop app displayed
 Dexcom G7 data without stale or refresh-failure indicators; no personal readings
 were saved in this report. Live LibreLinkUp was not retested.
 
-Executing the stored startup command is not an actual reboot or sign-out/sign-in.
-That final real sign-in check remains pending with the maintainer.
+The first real reboot exposed an older portable Librewin startup entry outside
+of the installed folder. That PC's effective startup entry was corrected and the
+old portable executable was disabled. After a further reboot on 25 October 2026,
+the maintainer confirmed successful automatic startup. Process inspection showed
+only the installed GlucoGeek 0.4.1 executable running with --background after boot;
+Windows' effective startup list pointed to that same executable. This verifies
+startup on the repaired PC; the automated installer upgrade checks above cover
+the standard installed upgrade path, not every manually configured portable copy.
 
 ## Repository and payload review
 
