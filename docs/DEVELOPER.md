@@ -66,9 +66,8 @@ Derived from [GlucoGeek for macOS (formerly LibreMac)](https://github.com/whistl
 
 The application and installer reuse GlucoGeek for macOS's original `Resources/AppIcon.icns`, converted to `Resources/AppIcon.ico` with 16, 24, 32, 48, 64, 128 and 256 pixel sizes. `Resources/AppIcon.png` is a preview.
 
-The inspected GlucoGeek for macOS revision includes no LICENSE file. This port does not invent or grant a license for that source. Confirm licensing before public redistribution. The GlucoGeek repository and release downloads remain private.
+The project owner confirmed ownership or permission to release the inherited source and icon under MIT. See LICENSE and THIRD_PARTY_NOTICES.md. Repository visibility remains a separate maintainer decision.
 
 ## Rename compatibility
 
 The app is GlucoGeek; the repositories use GlucoGeek-Windows and GlucoGeek-macOS. Windows keeps the original installer AppId, installation/profile folders and single-instance lock so the rename upgrades the existing app. Startup settings recognize the old Librewin entry; the installer replaces it with GlucoGeek and removes old named shortcuts and executable files. Full interactive upgrade testing remains outstanding.
-

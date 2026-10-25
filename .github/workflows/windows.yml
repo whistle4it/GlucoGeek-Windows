@@ -1,0 +1,76 @@
+name: Windows release checks
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+      - name: Offline application tests
+        shell: pwsh
+        run: ./build.ps1 -Test
+      - name: Scan Git history for secrets
+        shell: pwsh
+        run: |
+          $version = '8.30.1'
+          $base = "https://github.com/gitleaks/gitleaks/releases/download/v$version"
+          $zip = "gitleaks_${version}_windows_x64.zip"
+          $tool = Join-Path $env:RUNNER_TEMP 'gitleaks'
+          New-Item -ItemType Directory -Path $tool -Force | Out-Null
+          Invoke-WebRequest "$base/$zip" -OutFile "$tool/$zip"
+          Invoke-WebRequest "$base/gitleaks_${version}_checksums.txt" -OutFile "$tool/checksums.txt"
+          $expected = (Select-String -LiteralPath "$tool/checksums.txt" -SimpleMatch $zip).Line.Split(' ')[0]
+          if ((Get-FileHash "$tool/$zip").Hash -ne $expected) { throw 'Scanner checksum mismatch' }
+          Expand-Archive "$tool/$zip" $tool -Force
+          & "$tool/gitleaks.exe" git . --redact=100 --no-banner --log-opts='--all'
+          if ($LASTEXITCODE -ne 0) { throw 'Secret scan failed' }
+      - name: Build installer
+        shell: pwsh
+        run: |
+          $iscc = 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe'
+          if (-not (Test-Path -LiteralPath $iscc)) {
+            choco install innosetup --yes --no-progress
+            if ($LASTEXITCODE -ne 0) { throw 'Inno Setup installation failed' }
+          }
+          ./build-installer.ps1 -Iscc $iscc
+      - name: Download previous installer for upgrade test
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release download v0.3.1 --repo "$env:GITHUB_REPOSITORY" --pattern 'Librewin-v0.3.1-Setup-x64.exe*' --dir "$env:RUNNER_TEMP/legacy"
+          if ($LASTEXITCODE -ne 0) { throw 'Previous release download failed' }
+          $sum = (Get-Content "$env:RUNNER_TEMP/legacy/Librewin-v0.3.1-Setup-x64.exe.sha256").Split(' ')[0]
+          if ((Get-FileHash "$env:RUNNER_TEMP/legacy/Librewin-v0.3.1-Setup-x64.exe").Hash -ne $sum) { throw 'Previous installer checksum mismatch' }
+      - name: Fresh install, startup, upgrade, uninstall and reinstall
+        shell: pwsh
+        run: |
+          [xml]$project = Get-Content GlucoGeek.csproj
+          $version = $project.Project.PropertyGroup.Version
+          ./scripts/Test-Installer.ps1 -Installer "$PWD/installer-output/GlucoGeek-v$version-Setup-x64.exe" -LegacyInstaller "$env:RUNNER_TEMP/legacy/Librewin-v0.3.1-Setup-x64.exe"
+      - name: Save validation results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-validation
+          path: |
+            test-results.txt
+            ${{ runner.temp }}/glucogeek-installer-test/results.txt
+            ${{ runner.temp }}/glucogeek-installer-test/installed-smoke.txt
+          if-no-files-found: warn
+      - name: Save tested installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-installer
+          path: installer-output/*
